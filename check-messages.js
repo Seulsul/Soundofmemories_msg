@@ -8,7 +8,7 @@ const BASELINE_FILE = path.join(__dirname, 'baseline.json');
 
 async function scrapeMessages(page) {
   await page.goto(SITE_URL, { waitUntil: 'networkidle' });
-  await page.getByRole('button', { name: 'Post' }).click();
+  await page.getByRole('button', { name: 'Post' }).click({ force: true });
   await page.waitForTimeout(1500);
 
   const rows = await page.$$('[class*="PostPopup_msgRow__"]');
@@ -21,7 +21,7 @@ async function scrapeMessages(page) {
     if (isUnread) {
       const bubble = await row.$('[class*="PostPopup_bubble__"]');
       if (bubble) {
-        await bubble.click();
+        await bubble.click({ force: true });
         await page.waitForTimeout(800);
       }
     }
@@ -51,7 +51,7 @@ async function main() {
   if (!NTFY_TOPIC) throw new Error('NTFY_TOPIC 환경변수가 없습니다.');
 
   const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 
   const messages = await scrapeMessages(page);
   await browser.close();
@@ -59,18 +59,4 @@ async function main() {
   const isFirstRun = !fs.existsSync(BASELINE_FILE);
   const baseline = isFirstRun ? { seen: [] } : JSON.parse(fs.readFileSync(BASELINE_FILE, 'utf-8'));
   const seenSet = new Set(baseline.seen);
-  const newMessages = messages.filter(m => !seenSet.has(m.id));
-
-  if (isFirstRun) {
-    console.log(`최초 실행: 기존 ${messages.length}개를 베이스라인 저장 (알림 없음)`);
-  } else if (newMessages.length > 0) {
-    console.log(`새 메시지 ${newMessages.length}개, 알림 전송 중...`);
-    for (const msg of newMessages) await sendNtfy(msg);
-  } else {
-    console.log('새 메시지 없음');
-  }
-
-  fs.writeFileSync(BASELINE_FILE, JSON.stringify({ seen: messages.map(m => m.id) }, null, 2));
-}
-
-main().catch(err => { console.error(err); process.exit(1); });
+  const n
