@@ -1,0 +1,8 @@
+{
+  "name": "som-message-checker",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "playwright": "^1.47.0"
+  }
+}
