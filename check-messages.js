@@ -69,9 +69,8 @@ async function main() {
   }
 
   const browser = await chromium.launch();
-    const page = await browser.newPage({ viewport: { width: 2400, height: 3000 } });
-  const messages = await scrapeMessages(page);
-  await browser.close();
+    const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
+      const messages = await scrapeMessages(page);
 
   const isFirstRun = !fs.existsSync(BASELINE_FILE);
   let baseline;
