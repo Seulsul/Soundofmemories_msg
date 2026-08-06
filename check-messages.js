@@ -1,4 +1,4 @@
-const { chromium } = require('playwright');
+const { firefox } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 
@@ -68,9 +68,9 @@ async function main() {
     throw new Error('NTFY_TOPIC 환경변수가 없습니다.');
   }
 
-  const browser = await chromium.launch();
-    const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
-      const messages = await scrapeMessages(page);
+    const browser = await firefox.launch();    
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } }); 
+  const messages = await scrapeMessages(page);
 
   const isFirstRun = !fs.existsSync(BASELINE_FILE);
   let baseline;
