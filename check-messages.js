@@ -69,7 +69,7 @@ async function main() {
   }
 
     const browser = await firefox.launch();    
-  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } }); 
+  const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } }); 
   const messages = await scrapeMessages(page);
 
   const isFirstRun = !fs.existsSync(BASELINE_FILE);
