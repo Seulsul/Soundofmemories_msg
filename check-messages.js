@@ -17,10 +17,11 @@ async function scrapeMessages(page) {
     for (const row of rows) {
             for (let attempt = 0; attempt < 4; attempt++) {
                       const bubble = await row.$('[class*="PostPopup_bubble__"]');
-                      if (bubble) {
-                                  await bubble.click({ force: true });
-                      }
-                      await page.waitForTimeout(1500);
+        if (bubble) {
+                    await bubble.scrollIntoViewIfNeeded();
+                    await bubble.click({ force: true });
+        }
+              await page.waitForTimeout(1500);
                       const stillUnread = await row.evaluate(function (el) {
                                   return !!el.querySelector('[class*="bubbleUnread"]');
                       });
