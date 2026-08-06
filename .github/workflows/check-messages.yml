@@ -5,7 +5,11 @@ on:
     - cron: '*/10 * * * *'
   workflow_dispatch:
 
-permissions:
+concurrency:
+  group: check-som-messages
+    cancel-in-progress: false
+    
+    permissions:
   contents: write
 
 jobs:
