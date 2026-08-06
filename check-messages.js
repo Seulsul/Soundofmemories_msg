@@ -14,29 +14,40 @@ async function scrapeMessages(page) {
   const rows = await page.$$('[class*="PostPopup_msgRow__"]');
   const messages = [];
 
-  for (const row of rows) {
-      const bubble = await row.$('[class*="PostPopup_bubble__"]');
-          if (bubble) {
-                    await bubble.click({ force: true });
-                    await page.waitForTimeout(2000);
-          }
-    
-    const text = await row.evaluate(function (el) {
-      const t = el.querySelector('[class*="bubbleText"]');
-      return t ? t.innerText.trim() : null;
-    });
-    const dateText = await row.evaluate(function (el) {
-      return el.innerText;
-    });
-    const match = dateText.match(/\d{2}\.\d{2}\.\d{2}\s+\d{2}:\d{2}/);
-    const date = match ? match[0] : null;
+    const PLACEHOLDERS = ['편지가 왔어요 :)', '메시지를 확인해주세요!', '아직 확인하지 않은 메시지가 있어요!', '띵동~', '새로운 편지가 기다리고 있어요'];
 
-    if (text && date) {
-      messages.push({ id: date + '__' + text, date: date, text: text });
+    for (const row of rows) {
+            for (let attempt = 0; attempt < 4; attempt++) {
+                      const bubble = await row.$('[class*="PostPopup_bubble__"]');
+                      if (bubble) {
+                                  await bubble.click({ force: true });
+                      }
+                      await page.waitForTimeout(1500);
+                      const current = await row.evaluate(function (el) {
+                                  const t = el.querySelector('[class*="bubbleText"]');
+                                  return t ? t.innerText.trim() : null;
+                      });
+                      if (current && !PLACEHOLDERS.includes(current)) {
+                                  break;
+                      }
+            }
+
+            const text = await row.evaluate(function (el) {
+                      const t = el.querySelector('[class*="bubbleText"]');
+                      return t ? t.innerText.trim() : null;
+            });
+            const dateText = await row.evaluate(function (el) {
+                      return el.innerText;
+            });
+            const match = dateText.match(/\d{2}\.\d{2}\.\d{2}\s+\d{2}:\d{2}/);
+            const date = match ? match[0] : null;
+
+            if (text && date) {
+                      messages.push({ id: date + '__' + text, date: date, text: text });
+            }
     }
-  }
-  return messages;
-}
+      return messages;
+    }
 
 function encodeHeader(text) {
     const base64 = Buffer.from(text, 'utf-8').toString('base64');
