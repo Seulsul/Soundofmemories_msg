@@ -48,10 +48,10 @@ async function sendNtfy(msg) {
   await fetch('https://ntfy.sh/' + NTFY_TOPIC, {
     method: 'POST',
     headers: {
-      Title: '동시녹음 새 메시지 (' + msg.date + ')',
-      Priority: 'high',
-      Tags: 'love_letter',
-    },
+  Title: encodeURIComponent('동시녹음 새 메시지 (' + msg.date + ')'),
+  Priority: 'high',
+  Tags: 'love_letter',
+},
     body: msg.text,
   });
 }
