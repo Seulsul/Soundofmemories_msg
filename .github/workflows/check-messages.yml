@@ -3,9 +3,6 @@ name: Check SOM Messages
 on:
   workflow_dispatch:
 
-concurrency:
-  group: check-som-messages
-  cancel-in-progress: false    
 permissions:
   contents: write
   
