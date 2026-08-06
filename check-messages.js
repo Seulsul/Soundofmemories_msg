@@ -57,7 +57,6 @@ async function sendNtfy(msg) {
     headers: {
   Title: encodeHeader('동시녹음 새 메시지 (' + msg.date + ')'),
   Priority: 'high',
-  Tags: 'love_letter',
 },
     body: msg.text,
   });
