@@ -105,7 +105,11 @@ async function main() {
   fs.writeFileSync(BASELINE_FILE, JSON.stringify({ seen: allIds }, null, 2));
 }
 
-main().catch(function (err) {
-  console.error(err);
-  process.exit(1);
-});
+main()
+  .then(function () {
+        process.exit(0);
+  })
+  .catch(function (err) {
+        console.error(err);
+        process.exit(1);
+  });
