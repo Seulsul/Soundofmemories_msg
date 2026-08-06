@@ -29,14 +29,14 @@ jobs:
         id: playwright-cache
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+                    key: playwright-firefox-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
       - name: Install Playwright browser (only if cache miss)
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps firefox
 
       - name: Install OS deps (always, lightweight)
-        run: npx playwright install-deps chromium
+        run: npx playwright install-deps firefox
 
       - name: Run check script
         env:
