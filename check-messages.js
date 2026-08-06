@@ -109,10 +109,14 @@ async function main() {
     console.log('새 메시지 없음');
   }
 
-  const allIds = messages.map(function (m) {
-    return m.id;
-  });
-  fs.writeFileSync(BASELINE_FILE, JSON.stringify({ seen: allIds }, null, 2));
+  if (messages.length > 0) {
+      const allIds = messages.map(function (m) {
+        return m.id;
+      });
+      fs.writeFileSync(BASELINE_FILE, JSON.stringify({ seen: allIds }, null, 2));
+    } else {
+      console.log('경고: 스크래핑된 메시지가 0개라 baseline을 갱신하지 않음');
+    }
 }
 
 main()
