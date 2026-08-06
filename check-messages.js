@@ -51,11 +51,20 @@ function encodeHeader(text) {
     return '=?UTF-8?B?' + base64 + '?=';
 }
 
+function computeDDay(dateStr) {
+  const m = dateStr.match(/(\d{2})\.(\d{2})\.(\d{2})/);
+  if (!m) return '';
+  const msgDate = new Date(2000 + parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10));
+  const target = new Date(2027, 5, 7);
+  const diffDays = Math.round((target - msgDate) / (1000 * 60 * 60 * 24));
+  return diffDays >= 0 ? ('D-' + diffDays) : ('D+' + Math.abs(diffDays));
+}
+
 async function sendNtfy(msg) {
   await fetch('https://ntfy.sh/' + NTFY_TOPIC, {
     method: 'POST',
     headers: {
-  Title: encodeHeader('동시녹음 새 메시지 (' + msg.date + ')'),
+  Title: encodeHeader('동시녹음 새 메시지 (' + msg.date + '/' + computeDDay(msg.date) + ')'),
   Priority: 'high',
 },
     body: msg.text,
