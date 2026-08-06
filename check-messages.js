@@ -23,8 +23,8 @@ async function scrapeMessages(page) {
       const bubble = await row.$('[class*="PostPopup_bubble__"]');
       if (bubble) {
         await bubble.click({ force: true });
-        await page.waitForTimeout(800);
-      }
+        await page.waitForTimeout(2000);      
+            }
     }
 
     const text = await row.evaluate(function (el) {
@@ -44,11 +44,16 @@ async function scrapeMessages(page) {
   return messages;
 }
 
+function encodeHeader(text) {
+    const base64 = Buffer.from(text, 'utf-8').toString('base64');
+    return '=?UTF-8?B?' + base64 + '?=';
+}
+
 async function sendNtfy(msg) {
   await fetch('https://ntfy.sh/' + NTFY_TOPIC, {
     method: 'POST',
     headers: {
-  Title: encodeURIComponent('동시녹음 새 메시지 (' + msg.date + ')'),
+  Title: encodeHeader('동시녹음 새 메시지 (' + msg.date + ')'),
   Priority: 'high',
   Tags: 'love_letter',
 },
