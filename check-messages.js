@@ -15,18 +15,12 @@ async function scrapeMessages(page) {
   const messages = [];
 
   for (const row of rows) {
-    const isUnread = await row.evaluate(function (el) {
-      return !!el.querySelector('[class*="bubbleUnread"]');
-    });
-
-    if (isUnread) {
       const bubble = await row.$('[class*="PostPopup_bubble__"]');
-      if (bubble) {
-        await bubble.click({ force: true });
-        await page.waitForTimeout(2000);      
-            }
-    }
-
+          if (bubble) {
+                    await bubble.click({ force: true });
+                    await page.waitForTimeout(2000);
+          }
+    
     const text = await row.evaluate(function (el) {
       const t = el.querySelector('[class*="bubbleText"]');
       return t ? t.innerText.trim() : null;
