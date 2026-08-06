@@ -7,11 +7,10 @@ on:
 
 concurrency:
   group: check-som-messages
-    cancel-in-progress: false
-    
-    permissions:
+  cancel-in-progress: false    
+permissions:
   contents: write
-
+  
 jobs:
   check:
     runs-on: ubuntu-latest
