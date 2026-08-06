@@ -69,8 +69,7 @@ async function main() {
   }
 
   const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-
+    const page = await browser.newPage({ viewport: { width: 2400, height: 3000 } });
   const messages = await scrapeMessages(page);
   await browser.close();
 
