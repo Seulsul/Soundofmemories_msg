@@ -15,7 +15,7 @@ async function scrapeMessages(page) {
   const messages = [];
 
     for (const row of rows) {
-            for (let attempt = 0; attempt < 4; attempt++) {
+            for (let attempt = 0; attempt < 8; attempt++) {
                       const bubble = await row.$('[class*="PostPopup_bubble__"]');
         if (bubble) {
                     await bubble.scrollIntoViewIfNeeded();
