@@ -56,7 +56,8 @@ jobs:
             "https://api.github.com/repos/${{ github.repository }}/actions/workflows/check-messages.yml/runs?per_page=2&status=completed")
           FAIL_COUNT=$(echo "$RUNS" | grep -o '"conclusion":"failure"' | wc -l)
           if [ "$FAIL_COUNT" -ge 2 ]; then
-            curl -H "Title: 도영이 메시지가 안왕 🐰" \
+            TITLE=$(echo -n "🐰 도영이 메시지가 안왕" | base64 -w 0)
+            curl -H "Title: =?UTF-8?B?${TITLE}?=" \
                  -H "Priority: urgent" \
                  -d "궁빵이 빵배달 상태 점검 필요!" \
                  https://ntfy.sh/$ALERT_NTFY_TOPIC
