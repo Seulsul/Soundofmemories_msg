@@ -52,7 +52,8 @@ jobs:
         env:
           ALERT_NTFY_TOPIC: ${{ secrets.ALERT_NTFY_TOPIC }}
         run: |
-          RUNS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          RUNS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${{ github.repository }}/actions/workflows/check-messages.yml/runs?per_page=2&status=completed")
           FAIL_COUNT=$(echo "$RUNS" | grep -o '"conclusion":"failure"' | wc -l)
           echo "FAIL_COUNT is: $FAIL_COUNT"
