@@ -5,6 +5,7 @@ on:
 
 permissions:
   contents: write
+  actions: read
   
 jobs:
   check:
@@ -46,12 +47,17 @@ jobs:
           git diff --staged --quiet || git commit -m "update baseline / lockfile [skip ci]"
           git push
           
-      - name: Notify on failure
+      - name: Notify on 3+ consecutive failures
         if: failure()
         env:
           ALERT_NTFY_TOPIC: ${{ secrets.ALERT_NTFY_TOPIC }}
         run: |
-          curl -H "Title: 도영이 메시지가 안왕 🐰" \
-               -H "Priority: high" \
-               -d "궁빵이 빵배달 상태 점검 필요" \
-               https://ntfy.sh/$ALERT_NTFY_TOPIC
+          RUNS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/check-messages.yml/runs?per_page=2&status=completed")
+          FAIL_COUNT=$(echo "$RUNS" | grep -o '"conclusion":"failure"' | wc -l)
+          if [ "$FAIL_COUNT" -ge 2 ]; then
+            curl -H "Title: 도영이 메시지가 안왕 🐰" \
+                 -H "Priority: urgent" \
+                 -d "궁빵이 빵배달 상태 점검 필요!" \
+                 https://ntfy.sh/$ALERT_NTFY_TOPIC
+          fi
