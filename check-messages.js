@@ -19,7 +19,7 @@ async function scrapeMessages(page) {
                       const bubble = await row.$('[class*="PostPopup_bubble__"]');
         if (bubble) {
                     await bubble.scrollIntoViewIfNeeded();
-                    await bubble.click({ force: true });
+                    await bubble.evaluate(function (el) { el.click(); });
         }
               await page.waitForTimeout(1500);
                       const stillUnread = await row.evaluate(function (el) {
