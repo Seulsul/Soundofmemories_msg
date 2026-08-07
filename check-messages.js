@@ -8,7 +8,8 @@ const BASELINE_FILE = path.join(__dirname, 'baseline.json');
 
 async function scrapeMessages(page) {
   await page.goto(SITE_URL, { waitUntil: 'networkidle' });
-  await page.getByRole('button', { name: 'Post' }).click({ force: true });
+  const postButton = await page.getByRole('button', { name: 'Post' });
+  await postButton.evaluate(function (el) { el.click(); });
   await page.waitForTimeout(1500);
 
   const rows = await page.$$('[class*="PostPopup_msgRow__"]');
@@ -78,7 +79,7 @@ async function main() {
   }
 
     const browser = await firefox.launch();    
-  const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } }); 
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } }); 
   const messages = await scrapeMessages(page);
 
   const isFirstRun = !fs.existsSync(BASELINE_FILE);
