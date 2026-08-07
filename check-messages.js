@@ -64,9 +64,8 @@ async function sendNtfy(msg) {
   await fetch('https://ntfy.sh/' + NTFY_TOPIC, {
     method: 'POST',
     headers: {
-  Title: encodeHeader('상병 김동영 (' + msg.date + '/' + computeDDay(msg.date) + ')'),
+  Title: encodeHeader('🫡 상병 김동영 (' + msg.date + '/' + computeDDay(msg.date) + ')'),
   Priority: 'high',
-  Tags: 'saluting_face',
   Icon: 'https://raw.githubusercontent.com/Seulsul/Soundofmemories_msg/main/bbang.png',
 },
     body: msg.text,
