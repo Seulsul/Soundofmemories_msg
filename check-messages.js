@@ -1,6 +1,7 @@
 const { firefox } = require('playwright');
 const fs = require('fs');
 const path = require('path');
+throw new Error('테스트용 강제 실패');
 
 const SITE_URL = 'https://sound-of-memories.smtown.com/';
 const NTFY_TOPIC = process.env.NTFY_TOPIC;
