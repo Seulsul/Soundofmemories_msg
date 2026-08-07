@@ -7,10 +7,10 @@ const NTFY_TOPIC = process.env.NTFY_TOPIC;
 const BASELINE_FILE = path.join(__dirname, 'baseline.json');
 
 async function scrapeMessages(page) {
-  await page.goto(SITE_URL, { waitUntil: 'networkidle' });
+  await page.goto(SITE_URL, { waitUntil: 'domcontentloaded' });
   const postButton = await page.getByRole('button', { name: 'Post' });
   await postButton.evaluate(function (el) { el.click(); });
-  await page.waitForTimeout(1500);
+  await page.waitForTimeout(3000);
 
   const rows = await page.$$('[class*="PostPopup_msgRow__"]');
   const messages = [];
