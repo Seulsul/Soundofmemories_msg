@@ -2,6 +2,11 @@ name: Check SOM Messages
 
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: 'test or live'
+        required: false
+        default: 'test'
 
 permissions:
   contents: write
@@ -36,7 +41,7 @@ jobs:
 
       - name: Run check script
         env:
-          NTFY_TOPIC: ${{ github.event_name == 'workflow_dispatch' && secrets.TEST_NTFY_TOPIC || secrets.NTFY_TOPIC }}
+          NTFY_TOPIC: ${{ github.event.inputs.mode == 'live' && secrets.NTFY_TOPIC || secrets.TEST_NTFY_TOPIC }}
         run: node check-messages.js
 
       - name: Commit updated files
