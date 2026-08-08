@@ -1,4 +1,5 @@
 name: Check SOM Messages
+run-name: Check SOM Messages (${{ github.event.inputs.mode || 'live' }})
 
 on:
   workflow_dispatch:
