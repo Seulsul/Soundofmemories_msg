@@ -79,7 +79,7 @@ async function sendNtfy(msg) {
     method: 'POST',
     headers: {
       Authorization: 'Bearer ' + NTFY_TOKEN,
-      Title: encodeHeader('🫡 상병 김동영 (' + msg.date + '/' + computeDDay(msg.date) + ')'),
+      Title: encodeHeader('🫡 상병 김동영 (' + msg.date + ' / ' + computeDDay(msg.date) + ')'),
       Priority: 'high',
       Icon: 'https://raw.githubusercontent.com/Seulsul/Soundofmemories_msg/main/bbang.png',
     },
