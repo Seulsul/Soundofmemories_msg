@@ -27,16 +27,19 @@ jobs:
       - name: Install npm dependencies
         run: npm install
 
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-firefox-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-      - name: Install Playwright browser (only if cache miss)
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps firefox
+      - name: Verify Playwright browser is actually usable
+        id: verify-browser
+        run: |
+          if [ -f ~/.cache/ms-playwright/firefox-*/firefox/firefox ]; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          fi
 
+      - name: Install Playwright browser (cache miss or broken)
+        if: steps.verify-browser.outputs.ok != 'true'
+        run: npx playwright install --with-deps firefox
+        
       - name: Install OS deps (always, lightweight)
         run: npx playwright install-deps firefox
 
